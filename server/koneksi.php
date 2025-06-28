@@ -3,7 +3,7 @@
 define("DBHOST", "localhost");
 define("DBUSERNAME", "root");
 define("DBPASSWORD", "");
-define("DBNAME", "alumni"); // Pastikan database ini memuat tabel `alumni`
+define("DBNAME", "dt_alumi"); // Pastikan database ini memuat tabel `alumni`
 define("DBPORT", "3306");
 
 // Membuat koneksi

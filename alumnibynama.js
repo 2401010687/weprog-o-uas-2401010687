@@ -1,9 +1,9 @@
 function caridata() {
     let queryString = window.location.search;
     let urlParams = new URLSearchParams(queryString);
-    let idAlumni = urlParams.get("id");  // Mengambil parameter id, bukan nim
+    let idAlumni = urlParams.get("id");  
 
-    let urltarget = "http://localhost/pertemuan14/server/alumnyid.php";
+    let urltarget = "server/alumnbynama.php";
     let dta = `id=${idAlumni}`;
 
     $.ajax({
@@ -20,7 +20,7 @@ function caridata() {
                 $("#txPRODI").val(dt["isi"]["program_studi"]);
                 $("#txTELP").val(dt["isi"]["no_telepon"]);
 
-                // Set pilihan jenis kelamin sesuai nilai
+                
                 let jkVal = dt["isi"]["jenis_kelamin"];
                 if (jkVal === "Laki-laki") {
                     $("#txJK").val("Laki-laki");

@@ -6,7 +6,7 @@
         $dta["error"] = '2';
         $id = $_GET["id"];
 
-        $sql = "SELECT * FROM alumni WHERE id_alumni='$id';";
+        $sql = "SELECT * FROM alumi WHERE id_alumni='$id';";
         $hasil = mysqli_query($koneksi, $sql);
         $jAfrow = mysqli_num_rows($hasil);
 

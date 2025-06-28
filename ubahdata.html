@@ -13,17 +13,17 @@
     <div class="container">
         <h3>Ubah Data Alumni</h3>
         
-        <div class="alert alert-primary" id="sukses">Perubahan Data Alumni Sukses</div>
-        <div class="alert alert-warning" id="gagal">Perubahan Data Alumni Gagal</div>
+        <div class="alert alert-primary" id="sukses">
+            Perubahan Data Alumni Sukses    
+        </div> 
+        <div class="alert alert-warning" id="gagal">
+            Perubahan Data Alumni Mengalami Kegagalan    
+        </div> 
 
-        <form id="formDataAlumni" method="POST" action="">
-            <div class="form-group">
-                <label class="form-label">ID Alumni</label>
-                <input class="form-control" type="text" name="txID" id="txID" disabled>
-            </div>  
+        <form id="formDataAlumni" method="POST">
             <div class="form-group">
                 <label class="form-label">Nama Lengkap</label>
-                <input class="form-control" type="text" name="txNAMA_LENGKAP" id="txNAMA_LENGKAP">
+                <input class="form-control" type="text" name="txNAMA" id="txNAMA">
             </div>
             <div class="form-group">
                 <label class="form-label">Tanggal Lahir</label>
@@ -42,13 +42,13 @@
                 <input class="form-control" type="text" name="txPRODI" id="txPRODI">
             </div>
             <div class="form-group">
-                <label class="form-label">No Telepon</label>
+                <label class="form-label">No. Telepon</label>
                 <input class="form-control" type="text" name="txTELP" id="txTELP">
             </div>
             <div class="form-group">
                 <label class="form-label">Alamat</label>
                 <input class="form-control" type="text" name="txALAMAT" id="txALAMAT">
-            </div>
+            </div> 
             <div class="form-group jarak">
                 <button type="submit" id="cmdSIMPAN" class="btn btn-primary">Simpan</button>
                 <a class="btn btn-warning" href="dataalumni.html">Batal</a>
@@ -57,24 +57,23 @@
     </div>
     
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="alumnyid.js"></script> <!-- JS untuk load data berdasarkan id -->
+    <script src="alumnibynama.js"></script> 
     <script>
         $(function(){
             $("#sukses").hide();
             $("#gagal").hide();
-            caridata(); // Fungsi di alumnyid.js untuk isi form
+            caridata(); // Isi form dari server
 
             $("#formDataAlumni").submit(function(e){
                 e.preventDefault();
-                let id = $("#txID").val();
-                let nama = $("#txNAMA_LENGKAP").val();
+                let nama = $("#txNAMA").val();
                 let tgl = $("#txTGL").val();
                 let jkel = $("#txJK").val();
                 let prodi = $("#txPRODI").val();
                 let telp = $("#txTELP").val();
                 let alamat = $("#txALAMAT").val();
 
-                let dta = `txID=${id}&txNAMA_LENGKAP=${nama}&txTGL=${tgl}&txJK=${jkel}&txPRODI=${prodi}&txTELP=${telp}&txALAMAT=${alamat}`;
+                let dta = `txNAMA=${nama}&txTGL=${tgl}&txJK=${jkel}&txPRODI=${prodi}&txTELP=${telp}&txALAMAT=${alamat}`;
                 let urltarget = "server/alumniupdate.php";
 
                 $.ajax({
@@ -82,10 +81,10 @@
                     type: 'POST',
                     dataType: 'json',
                     data: dta,
-                    success:function(res){
-                        if(res["error"]==0){
+                    success:function(hsl){
+                        if(hsl["error"]==0){
                             $("#sukses").show();
-                        }else{
+                        } else {
                             $("#gagal").show();
                         }
                     },

@@ -3,43 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tambah Data Mahasiswa</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+    <title>Ubah Data Alumni</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        .jarak{padding-top: 30px;}
+        .jarak { padding-top: 30px; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h3>Ubah Data Mahasiswa</h3>
+        <h3>Ubah Data Alumni</h3>
         
         <div class="alert alert-primary" id="sukses">
-        Perubahan Data Mahasiswa Sukses    
+            Perubahan Data Alumni Sukses    
         </div> 
         <div class="alert alert-warning" id="gagal">
-        Perubahan Data Mahasiswa Mengalami kegagalan    
+            Perubahan Data Alumni Mengalami Kegagalan    
         </div> 
 
-        <form id="formDataMHS" method="POST" action="">
+        <form id="formDataAlumni" method="POST">
             <div class="form-group">
-                <label class="form-label">NIM</label>
-                <input class="form-control" type="text" name="txNIM" id="txNIM" disabled>
-            </div>  
-            <div class="form-group">
-                <label class="form-label">Nama Mahasiswa</label>
+                <label class="form-label">Nama Lengkap</label>
                 <input class="form-control" type="text" name="txNAMA" id="txNAMA" disabled>
             </div>
             <div class="form-group">
-                <label class="form-label">TGL Lahir</label>
+                <label class="form-label">Tanggal Lahir</label>
                 <input class="form-control" type="date" name="txTGL" id="txTGL" disabled>
             </div>
             <div class="form-group">
                 <label class="form-label">Jenis Kelamin</label>
                 <select class="form-control" name="txJK" id="txJK" disabled>
                     <option disabled selected>Pilih Jenis Kelamin</option>
-                    <option value="L">Laki-Laki</option>
-                    <option value="P">Perempuan</option>
+                    <option value="Laki-laki">Laki-Laki</option>
+                    <option value="Perempuan">Perempuan</option>
                 </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Program Studi</label>
+                <input class="form-control" type="text" name="txPRODI" id="txPRODI" disabled>
+            </div>
+            <div class="form-group">
+                <label class="form-label">No. Telepon</label>
+                <input class="form-control" type="text" name="txTELP" id="txTELP" disabled>
             </div>
             <div class="form-group">
                 <label class="form-label">Alamat</label>
@@ -47,49 +51,46 @@
             </div> 
             <div class="form-group jarak">
                 <button type="submit" id="cmdHapus" class="btn btn-danger">Hapus</button>
-                <a class="btn btn-warning" href="datamahasiswa.html">Batal</a>
+                <a class="btn btn-warning" href="dataalumni.html">Batal</a>
             </div>      
         </form>
     </div>
     
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script src="mhsbynim.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="alumnibynama.js"></script> <!-- file JS untuk memuat data dari server -->
     <script>
         $(function(){
             $("#sukses").hide();
             $("#gagal").hide();
-            caridata();
+            caridata(); // Fungsi ini mengambil data alumni dan mengisi field form
 
-            $("#formDataMHS").submit(function(e){
+            $("#formDataAlumni").submit(function(e){
                 e.preventDefault();
-                let nim = $("#txNIM").val();
-                let dta = `txNIM=${nim}`;
-                let urltarget = "server/mhsdestroy.php";
+                let nama = $("#txNAMA").val(); // bisa diganti tergantung parameter delete-nya
+                let dta = `txNAMA=${nama}`;
+                let urltarget = "server/alumnidestory.php";
 
                 $.ajax({
                     url: urltarget,
                     type: 'POST',
                     dataType: 'json',
                     data: dta,
-                    success:function(hsl){
-                        if(hsl["error"]==0){
-                            $("#sukses").show();
-                            $("#sukses").html("Penghapusan sukses dilaksanakan");
-                        }else{
-                            $("#gagal").show();
-                            $("#gagal").html("Penghapusan Gagal dilaksanakan");
+                    success: function(hsl){
+                        if(hsl["error"] == 0){
+                            $("#sukses").show().html("Penghapusan sukses dilaksanakan");
+                        } else {
+                            $("#gagal").show().html("Penghapusan gagal dilaksanakan");
                         }
                     },
-                    error:function(){
-                        $("#gagal").show();
-                        $("#gagal").html("Penghapusan Gagal dilaksanakan");
+                    error: function(){
+                        $("#gagal").show().html("Penghapusan gagal dilaksanakan");
                     }
                 });
-                setTimeout(()=>{
-                    window.location.href="datamahasiswa.html"
-                },2000)
+                setTimeout(() => {
+                    window.location.href = "dataalumni.html";
+                }, 2000);
             });
-        })
+        });
     </script>
 </body>
 </html>

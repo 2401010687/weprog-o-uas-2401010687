@@ -31,7 +31,7 @@ if (
     }
 } else {
     $hsl["error"] = 1;
-    $hsl["message"] = "Data POST tidak lengkap";
+    
 }
 
 header("Content-type: application/json; charset=utf-8");

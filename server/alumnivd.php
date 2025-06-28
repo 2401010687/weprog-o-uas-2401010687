@@ -1,12 +1,15 @@
 <?php
-    include_once("koneksi.php");
+global $koneksi;
+include_once("koneksi.php");
 
-    $h = []; // Inisialisasi array hasil
+// Query ambil data alumni, pastikan nama tabel sesuai di database kamu
+$sql = "SELECT id_alumni, nama_lengkap, alamat, tanggal_lahir, jenis_kelamin, program_studi, no_telepon FROM alumni;";
 
-    $sql = "SELECT id_alumni, nama_lengkap, alamat, tanggal_lahir, jenis_kelamin, program_studi, no_telepon FROM alumni;";
-    $ps = mysqli_query($koneksi, $sql);
+$ps = mysqli_query($koneksi, $sql);
 
-    while($res = mysqli_fetch_assoc($ps)){
+$h = []; 
+if ($ps) {
+    while ($res = mysqli_fetch_assoc($ps)) {
         $h[] = array(
             "id_alumni"     => $res["id_alumni"],
             "nama_lengkap"  => $res["nama_lengkap"],
@@ -17,7 +20,7 @@
             "no_telepon"    => $res["no_telepon"]
         );
     }
-
-    header("Content-type: application/json");
-    echo json_encode($h);
+} 
+header("Content-type: application/json");
+echo json_encode($h);
 ?>
