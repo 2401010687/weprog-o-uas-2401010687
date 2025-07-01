@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Tambah Data Alumni</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>.jarak { padding-top: 30px; }</style>
+</head>
+<body>
+    <div class="container mt-4">
+        <h3>Tambah Data Alumni</h3>
+
+        <div class="alert alert-primary" id="sukses">Penambahan Data Alumni Berhasil</div>
+        <div class="alert alert-warning" id="gagal">Penambahan Data Alumni Gagal</div>
+
+        <form id="formDataAlumni" method="POST" action="">
+            <div class="form-group">
+                <label class="form-label">NIM Alumni</label>
+                <input class="form-control" type="text" name="txNIM" id="txNIM" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Nama Lengkap</label>
+                <input class="form-control" type="text" name="txNAMA" id="txNAMA" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Jenis Kelamin</label>
+                <select class="form-control" name="txJK" id="txJK" required>
+                    <option disabled selected>Pilih Jenis Kelamin</option>
+                    <option value="Laki-laki">Laki-laki</option>
+                    <option value="Perempuan">Perempuan</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Tanggal Lahir</label>
+                <input class="form-control" type="date" name="txTGL" id="txTGL" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Program Studi</label>
+                <input class="form-control" type="text" name="txPRODI" id="txPRODI" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">No. Telepon</label>
+                <input class="form-control" type="text" name="txTELP" id="txTELP" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Alamat</label>
+                <textarea class="form-control" name="txALAMAT" id="txALAMAT" required></textarea>
+            </div>
+            <div class="form-group jarak">
+                <button type="submit" class="btn btn-primary">Simpan</button>
+                <a class="btn btn-warning" href="dataalumni.html">Batal</a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("sukses").style.display = "none";
+        document.getElementById("gagal").style.display = "none";
+
+        const frm = document.getElementById("formDataAlumni");
+        frm.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            const dta = `txNIM=${frm.txNIM.value}&txNAMA=${frm.txNAMA.value}&txJK=${frm.txJK.value}&txTGL=${frm.txTGL.value}&txPRODI=${frm.txPRODI.value}&txTELP=${frm.txTELP.value}&txALAMAT=${frm.txALAMAT.value}`;
+
+            fetch('server/alumnicreatedata.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: dta
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data["error"] == 0) {
+                    document.getElementById("sukses").style.display = "block";
+                    document.getElementById("gagal").style.display = "none";
+                } else {
+                    document.getElementById("sukses").style.display = "none";
+                    document.getElementById("gagal").style.display = "block";
+                }
+            })
+            .catch(err => {
+                console.error("DEBUG:", err);
+                document.getElementById("sukses").style.display = "none";
+                document.getElementById("gagal").style.display = "block";
+            });
+
+            setTimeout(() => {
+                window.location.href = "dataalumni.html";
+            }, 2000);
+        });
+    </script>
+</body>
+</html>

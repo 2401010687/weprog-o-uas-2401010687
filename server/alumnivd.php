@@ -1,42 +1,24 @@
 <?php
-include_once("konfigurasi.php");
+    include_once("konfigurasi.php");
+    global $koneksi;
 
-header("Content-Type: application/json; charset=utf-8");
+    $sql = "SELECT Nim_alumni, nama_lengkap, alamat, tanggal_lahir, jenis_kelamin, program_studi, no_telepon FROM alumni;";
+    $ps = mysqli_query($koneksi, $sql);
 
-$sql = "SELECT 
-    id_alumni, 
-    nama_lengkap, 
-    jenis_kelamin, 
-    tanggal_lahir, 
-    program_studi, 
-    no_telepon, 
-    alamat 
-FROM alumni";
+    $h = []; // inisialisasi array hasil
 
-$result = mysqli_query($koneksi, $sql);
+    while ($res = mysqli_fetch_assoc($ps)) {
+        $h[] = array(
+            "Nim_alumni"     => $res["Nim_alumni"],
+            "nama_lengkap"   => $res["nama_lengkap"],
+            "alamat"         => $res["alamat"],
+            "tanggal_lahir"  => $res["tanggal_lahir"],
+            "jenis_kelamin"  => $res["jenis_kelamin"],
+            "program_studi"  => $res["program_studi"],
+            "no_telepon"     => $res["no_telepon"]
+        );
+    }
 
-if (!$result) {
-    // Kirim response JSON berisi error
-    echo json_encode([
-        "error" => 1,
-        "message" => "Query gagal: " . mysqli_error($koneksi)
-    ]);
-    mysqli_close($koneksi);
-    exit;
-}
-
-$data = [];
-
-while ($row = mysqli_fetch_assoc($result)) {
-    $data[] = $row;
-}
-
-mysqli_free_result($result);
-mysqli_close($koneksi);
-
-// Response JSON data tanpa error
-echo json_encode([
-    "error" => 0,
-    "data" => $data
-]);
+    header("Content-type: application/json");
+    echo json_encode($h);
 ?>

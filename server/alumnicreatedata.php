@@ -1,43 +1,38 @@
 <?php
-include_once("konfigurasi.php");
-$hsl = ["error" => 1,  ];
+    include_once("konfigurasi.php");
 
-if (
-    isset($_POST["txID"]) &&
-    isset($_POST["txNAMA_LENGKAP"]) &&
-    isset($_POST["txTGL"]) &&
-    isset($_POST["txJK"]) &&
-    isset($_POST["txPRODI"]) &&
-    isset($_POST["txTELP"]) &&
-    isset($_POST["txALAMAT"])
-) {
-    $id_alumni      = mysqli_real_escape_string($koneksi, $_POST["txID"]);
-    $nama_lengkap   = mysqli_real_escape_string($koneksi, $_POST["txNAMA_LENGKAP"]);
-    $tanggal_lahir  = mysqli_real_escape_string($koneksi, $_POST["txTGL"]);
-    $jenis_kelamin  = mysqli_real_escape_string($koneksi, $_POST["txJK"]);
-    $program_studi  = mysqli_real_escape_string($koneksi, $_POST["txPRODI"]);
-    $no_telepon     = mysqli_real_escape_string($koneksi, $_POST["txTELP"]);
-    $alamat         = mysqli_real_escape_string($koneksi, $_POST["txALAMAT"]);
+    $hsl["error"] = 1;
 
-    $sql = "UPDATE alumni SET
-                nama_lengkap = '$nama_lengkap',
-                tanggal_lahir = '$tanggal_lahir',
-                jenis_kelamin = '$jenis_kelamin',
-                program_studi = '$program_studi',
-                no_telepon = '$no_telepon',
-                alamat = '$alamat'
-            WHERE id_alumni = '$id_alumni'";
+    if (
+        isset($_POST["txNIM"]) &&
+        isset($_POST["txNAMA"]) &&
+        isset($_POST["txJK"]) &&
+        isset($_POST["txTGL"]) &&
+        isset($_POST["txPRODI"]) &&
+        isset($_POST["txTELP"]) &&
+        isset($_POST["txALAMAT"])
+    ) {
+        $nim    = $_POST["txNIM"];
+        $nama   = $_POST["txNAMA"];
+        $jk     = $_POST["txJK"];
+        $tgl    = $_POST["txTGL"];
+        $prodi  = $_POST["txPRODI"];
+        $telp   = $_POST["txTELP"];
+        $alamat = $_POST["txALAMAT"];
 
-    $hasil = mysqli_query($koneksi, $sql);
+        $sql = "INSERT INTO alumni (Nim_alumni, nama_lengkap, jenis_kelamin, tanggal_lahir, program_studi, no_telepon, alamat) 
+                VALUES ('$nim', '$nama', '$jk', '$tgl', '$prodi', '$telp', '$alamat');";
 
-    if ($hasil && mysqli_affected_rows($koneksi) > 0) {
-        $hsl["error"] = 0;
-        $hsl["message"] = "Data berhasil diubah";
-    } else {
-        $hsl["message"] = "Gagal mengubah data atau tidak ada perubahan";
+        $hsl["sql"] = $sql;
+
+        $hasil = mysqli_query($koneksi, $sql);
+        $hsl["affectedrows"] = mysqli_affected_rows($koneksi);
+
+        if ($hasil) {
+            $hsl["error"] = 0;
+        }
     }
-}
 
-header("Content-Type: application/json; charset=utf-8");
-echo json_encode($hsl);
+    header("Content-type: application/json; charset=utf-8");
+    echo json_encode($hsl);
 ?>

@@ -1,31 +1,22 @@
 <?php
-include_once("konfigurasi.php");
+    include_once("konfigurasi.php");
+    $dta["error"] = '1';
 
-$dta = ["error" => 1,];
+    if (isset($_POST["txNIM"])) {
+        $dta["error"] = '2';
+        $nim = $_POST["txNIM"];
 
-if (isset($_POST["txID"])) {
-    // Ambil dan escape data untuk keamanan
-    $id = mysqli_real_escape_string($koneksi, $_POST["txID"]);
+        $sql = "DELETE FROM alumni WHERE Nim_alumni = '$nim';";
+        $hasil = mysqli_query($koneksi, $sql);
+        $jAfrow = mysqli_affected_rows($koneksi);
 
-    // Query hapus data alumni berdasarkan id_alumni
-    $sql = "DELETE FROM alumni WHERE id_alumni = '$id'";
-
-    $hasil = mysqli_query($koneksi, $sql);
-
-    if ($hasil) {
-        if (mysqli_affected_rows($koneksi) > 0) {
-            $dta["error"] = 0;  // Berhasil hapus
-            $dta["message"] = "Data berhasil dihapus";
-        } else {
-            $dta["message"] = "Data dengan ID tersebut tidak ditemukan.";
+        if ($jAfrow > 0) {
+            $dta["error"] = '0';
         }
-    } else {
-        $dta["message"] = "Kesalahan query: " . mysqli_error($koneksi);
+
+        mysqli_close($koneksi);
     }
-}
 
-mysqli_close($koneksi);
-
-header("Content-Type: application/json; charset=utf-8");
-echo json_encode($dta);
+    header("Content-type: application/json");
+    echo json_encode($dta);
 ?>

@@ -1,23 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Data Alumni</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" />
-  <style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Data Alumni</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4Q6Gf2aSP4eDXB8Miphtr37CMZZQ5oXLH2yaXMJ2w8e2ZtHTl7GptT4jmndRuHDT" crossorigin="anonymous">
+    <style>
     .container-fluid {
       background-color: white;
       margin: 30px auto;
       padding: 20px;
       border-radius: 10px;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
-      max-width: 1200px;
     }
+
     h3 {
       background-color: #e7e7ec;
       color: rgb(10, 9, 9);
-      padding: 5px 10px;
+      padding: 5px;
       border-radius: 5px;
       display: flex;
       justify-content: space-between;
@@ -27,79 +27,64 @@
 </head>
 <body>
 
-  <div class="container-fluid" style="background-color: #1f05aeaf;">
-    <h3>
-      DATA ALUMNI 
-      <a class="btn btn-primary btn-sm" href="tambahdataalumni.html">Tambah Data</a>
-    </h3>
-    <div id="dtalumi" class="table-responsive"></div>
-  </div>
+    <div class="container mt-4">
+        <h3>Data Alumni 
+            <a class="btn btn-primary btn-sm" href="tambahdata.html">Tambah Data</a>
+        </h3>
+        <div id="dtalumni"></div>
+    </div>
 
-  <script>
-    const xml = new XMLHttpRequest();
-    xml.open("GET", "server/alumnivd.php", true);
-    xml.send();
+    <script>
+        const xml = new XMLHttpRequest();
+        xml.open("GET", "server/alumnivd.php");
+        xml.send();
 
-    xml.onload = function () {
-      try {
-        const response = JSON.parse(this.responseText);
+        xml.onload = function() {
+            const dta = JSON.parse(this.responseText);
+            console.log(dta);
+            
+            let tbl = `
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>NIM</th>
+                            <th>Nama Lengkap</th>
+                            <th>Jenis Kelamin</th>
+                            <th>Tanggal Lahir</th>
+                            <th>Program Studi</th>
+                            <th>No. Telepon</th>
+                            <th>Alamat</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
 
-        if (response.error !== 0) {
-          document.getElementById("dtalumi").innerHTML = `<div class='alert alert-danger'>Gagal memuat data alumni: ${response.message || 'Error tidak diketahui.'}</div>`;
-          return;
-        }
+            let no = 1;
+            for (let i = 0; i < dta.length; i++) {
+                tbl += `
+                    <tr>
+                        <td>${no}</td>
+                        <td>${dta[i]["Nim_alumni"]}</td>
+                        <td>${dta[i]["nama_lengkap"]}</td>
+                        <td>${dta[i]["jenis_kelamin"]}</td>
+                        <td>${dta[i]["tanggal_lahir"]}</td>
+                        <td>${dta[i]["program_studi"]}</td>
+                        <td>${dta[i]["no_telepon"]}</td>
+                        <td>${dta[i]["alamat"]}</td>
+                        <td>
+                            <a class="btn btn-sm btn-warning" href="ubahdata.html?nim=${dta[i]["Nim_alumni"]}">Ubah</a>
+                            <a class="btn btn-sm btn-danger" href="hapusdata.html?nim=${dta[i]["Nim_alumni"]}">Hapus</a>
+                        </td>
+                    </tr>
+                `;
+                no++;
+            }
 
-        const dta = response.data;
-
-        if (!Array.isArray(dta) || dta.length === 0) {
-          document.getElementById("dtalumi").innerHTML = "<div class='alert alert-warning'>Data alumni kosong.</div>";
-          return;
-        }
-
-        let tbl = '<table class="table table-dark table-hover table-striped">';
-        tbl += `<thead>
-                  <tr>
-                    <th>No</th>
-                    <th>ID Alumni</th>
-                    <th>Nama Lengkap</th>
-                    <th>Tanggal Lahir</th>
-                    <th>Jenis Kelamin</th>
-                    <th>Program Studi</th>
-                    <th>No Telepon</th>
-                    <th>Alamat</th>
-                    <th>Aksi</th>
-                  </tr>
-                </thead><tbody>`;
-
-        dta.forEach((item, index) => {
-          tbl += '<tr>';
-          tbl += `<td>${index + 1}</td>`;
-          tbl += `<td>${item.id_alumni}</td>`;
-          tbl += `<td>${item.nama_lengkap}</td>`;
-          tbl += `<td>${item.tanggal_lahir}</td>`;
-          tbl += `<td>${item.jenis_kelamin}</td>`;
-          tbl += `<td>${item.program_studi}</td>`;
-          tbl += `<td>${item.no_telepon}</td>`;
-          tbl += `<td>${item.alamat}</td>`;
-          tbl += `<td>
-                    <a class="btn btn-sm btn-warning" href="ubahdataalumni.html?id=${item.id_alumni}">Ubah</a>
-                    <a class="btn btn-sm btn-danger" href="hapusdataalumni.html?id=${item.id_alumni}">Hapus</a>
-                  </td>`;
-          tbl += '</tr>';
-        });
-
-        tbl += '</tbody></table>';
-        document.getElementById("dtalumi").innerHTML = tbl;
-
-      } catch (err) {
-        document.getElementById("dtalumi").innerHTML = `<div class='alert alert-danger'>Gagal memuat data alumni: ${err.message}</div>`;
-      }
-    };
-
-    xml.onerror = function () {
-      document.getElementById("dtalumi").innerHTML = `<div class='alert alert-danger'>Gagal menghubungi server.</div>`;
-    };
-  </script>
-
+            tbl += `</tbody></table>`;
+            document.getElementById("dtalumni").innerHTML = tbl;
+        };
+    </script>
 </body>
 </html>

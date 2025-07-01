@@ -1,14 +1,17 @@
 <?php
-define("DBHOST", "localhost");
-define("DBUSERNAME", "root");
-define("DBPASSWORD", "");
-define("DBNAME", "dt_alumi");  // pastikan ini sama dengan nama database kamu
-define("DBPORT", 3306);         // angka, bukan string
+    // Konstanta konfigurasi database
+    define("DBHOST", "localhost");
+    define("DBUSERNAME", "root");
+    define("DBPASSWORD", "");
+    define("DBNAME", "dt_alumi"); // diganti dari 'mahasiswa' menjadi 'alumni'
+    define("DBPORT", "3306");
 
-global $koneksi;
-$koneksi = mysqli_connect(DBHOST, DBUSERNAME, DBPASSWORD, DBNAME, DBPORT);
+    // Koneksi ke database
+    global $koneksi;
+    $koneksi = mysqli_connect(DBHOST, DBUSERNAME, DBPASSWORD, DBNAME, DBPORT);
 
-if (!$koneksi) {
-    die("Koneksi ke database gagal: " . mysqli_connect_error());
-}
+    // Cek koneksi
+    if (!$koneksi) {
+        die("Koneksi ke database gagal: " . mysqli_connect_error());
+    }
 ?>
